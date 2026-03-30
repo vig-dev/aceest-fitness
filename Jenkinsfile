@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Run Tests in Docker') {
+        stage('Install Dependencies') {
             steps {
-                sh '''
-                docker run --rm \
-                -v $(pwd):/app \
-                -w /app \
-                python:3.10 \
-                sh -c "pip install -r requirements.txt && pytest"
-                '''
+                sh 'python3 -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'python3 -m pytest'
             }
         }
     }
