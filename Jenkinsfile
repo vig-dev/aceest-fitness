@@ -2,19 +2,28 @@ pipeline {
     agent any
 
     stages {
+        stage('Check Python') {
+            steps {
+                sh '''
+                which python || true
+                which python3 || true
+                '''
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh '''
-                apt-get update || true
-                apt-get install -y python3 python3-pip || true
-                python3 -m pip install -r requirements.txt
+                python -m pip install -r requirements.txt || python3 -m pip install -r requirements.txt
                 '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'python3 -m pytest'
+                sh '''
+                python -m pytest || python3 -m pytest
+                '''
             }
         }
     }
