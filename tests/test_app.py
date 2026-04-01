@@ -24,6 +24,40 @@ def test_add_member():
     client = app.test_client()
     response = client.post("/members", json={
         "name": "Alex",
-        "plan": "Platinum"
+        "plan_id": "Platinum"
     })
     assert response.status_code == 201
+
+def test_get_plans():
+    client = app.test_client()
+    response = client.get("/plans")
+    assert response.status_code == 200
+
+
+def test_add_plan():
+    client = app.test_client()
+    response = client.post("/plans", json={
+        "name": "Platinum",
+        "price": 5000
+    })
+    assert response.status_code == 201
+
+
+def test_get_member_by_id():
+    client = app.test_client()
+    response = client.get("/members/1")
+    assert response.status_code == 200
+
+
+def test_update_member():
+    client = app.test_client()
+    response = client.put("/members/1", json={
+        "name": "Updated Name"
+    })
+    assert response.status_code == 200
+
+
+def test_delete_member():
+    client = app.test_client()
+    response = client.delete("/members/1")
+    assert response.status_code == 200
