@@ -1,23 +1,38 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE = "vighneshdevane/aceest-fitness"
+    }
+
     stages {
-        stage('Setup Python Environment') {
+
+        stage('Clone Code') {
             steps {
-                sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install -r requirements.txt
-                '''
+                git 'https://github.com/vig-dev/aceest-fitness.git'
             }
         }
 
-        stage('Run Tests') {
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                . venv/bin/activate
-                pytest
-                '''
+                sh 'docker build -t $IMAGE:latest .'
+            }
+        }
+
+        stage('Run Tests in Container') {
+            steps {
+                sh 'docker run $IMAGE:latest pytest -v'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'TOKEN')]) {
+                    sh '''
+                    echo $TOKEN | docker login -u $USER --password-stdin
+                    docker push $IMAGE:latest
+                    '''
+                }
             }
         }
     }
