@@ -22,7 +22,7 @@ gym_info = {
 def home():
     return jsonify({
         "message": "Welcome to ACEest Fitness API",
-        "version": "v3"
+        "version": "ACEest Fitness App - Version 4 Running"
     })
 
 
