@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-v3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aceest
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: aceest
+        version: v3
+    spec:
+      containers:
+      - name: aceest-container
+        image: vighneshdevane/aceest-fitness:v3
+        ports:
+        - containerPort: 5000
